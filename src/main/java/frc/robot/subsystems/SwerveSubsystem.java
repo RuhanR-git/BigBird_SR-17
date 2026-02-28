@@ -1,7 +1,15 @@
 package frc.robot.subsystems;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.function.Supplier;
+
+import org.json.simple.parser.ParseException;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -14,12 +22,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import swervelib.SwerveDrive;
 import swervelib.parser.SwerveParser;
-
-// PathPlanner Imports
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.config.RobotConfig;
-import com.pathplanner.lib.config.PIDConstants;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 public class SwerveSubsystem extends SubsystemBase {
   
   private final SwerveDrive swerveDrive;
@@ -29,7 +31,7 @@ public class SwerveSubsystem extends SubsystemBase {
     File directory = new File(Filesystem.getDeployDirectory(), "swerve");
     try {
       swerveDrive = new SwerveParser(directory).createSwerveDrive(Constants.maxSpeed);
-    } catch (Exception e) {
+    } catch (IOException e) {
       throw new RuntimeException(e);
     }
 
@@ -40,7 +42,7 @@ public class SwerveSubsystem extends SubsystemBase {
     setupPathPlanner();
   }
 
-  public void setupPathPlanner() {
+  public final void setupPathPlanner() {
     try {
         RobotConfig config = RobotConfig.fromGUISettings();
 
@@ -60,7 +62,7 @@ public class SwerveSubsystem extends SubsystemBase {
             },
             this
         );
-    } catch (Exception e) {
+    } catch (IOException | ParseException e) {
         DriverStation.reportError("Failed to load PathPlanner config: " + e.getMessage(), e.getStackTrace());
     }
 }
