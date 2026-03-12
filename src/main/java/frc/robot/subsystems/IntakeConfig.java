@@ -18,4 +18,13 @@ public class IntakeConfig {
     public double intakeWheelsOuttakeSpeed;
     public double intakeArmDeploySpeed;
     public double intakeArmStowSpeed;
+
+    // PID Constants
+    public double intakeArmP;
+    public double intakeArmI;
+    public double intakeArmD;
+
+    //Soft limits for intake arm
+    public int intakeArmForwardLimit;
+    public int intakeArmReverseLimit;
 }
